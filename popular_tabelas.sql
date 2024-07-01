@@ -1,3 +1,7 @@
+START TRANSACTION;
+
+use spotify;
+
 -- Insercao de Dados - Spotify
 SET SQL_SAFE_UPDATES=0;
 
@@ -231,10 +235,6 @@ VALUES
 (129, 98760, 14, 90123456, 345678788, '19:36:00', '2024-04-15'),
 (130, 10123, 17, 12345670, 345679099, '18:47:15', '2024-04-15');
 
-UPDATE artists AS a
-JOIN songs AS s ON a.artist_ID = s.artist_id
-SET a.song_ID = s.song_ID;
 
-UPDATE plays
-JOIN playlist ON plays.song_ID = playlist.song_ID
-SET plays.playlist_ID = playlist.playlist_ID;
+COMMIT;
+

@@ -1,8 +1,14 @@
+START TRANSACTION;
+
+use spotify;
+
 -- Visualizacao de musicas, ID e artistas
 CREATE OR REPLACE VIEW musicas AS
 SELECT s.song_ID, s.song_name AS song_Name, a.artist_name
 FROM songs s
 JOIN artists a ON s.artist_id = a.artist_ID;
+
+SELECT * FROM musicas;
 
 -- Visualizacao de gravadoras por artistas
 CREATE OR REPLACE VIEW gravadoras AS
@@ -26,3 +32,5 @@ CREATE OR REPLACE VIEW playlist_users AS
 SELECT DISTINCT u.user_name, p.playlist_name
 FROM user u
 JOIN playlist p ON u.user_ID = p.user_ID;
+
+COMMIT;

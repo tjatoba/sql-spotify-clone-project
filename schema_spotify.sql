@@ -1,9 +1,13 @@
+START TRANSACTION;
+
 -- Criação das tabelas - Spotify
+
+CREATE SCHEMA Spotify;
 
 use spotify;
 
 CREATE TABLE IF NOT EXISTS user (
-	user_ID INT,
+	user_ID INT NOT NULL AUTO_INCREMENT,
     user_name VARCHAR(30),
     user_email VARCHAR(50),
     user_type VARCHAR(30),
@@ -12,13 +16,13 @@ CREATE TABLE IF NOT EXISTS user (
     );
     
 CREATE TABLE IF NOT EXISTS genre (
-    genre_ID INT,
+    genre_ID INT NOT NULL AUTO_INCREMENT,
     genre_name VARCHAR(50),
     PRIMARY KEY(genre_ID)
     );
     
 	CREATE TABLE IF NOT EXISTS songs (
-	song_ID INT,
+	song_ID INT NOT NULL AUTO_INCREMENT,
     song_name VARCHAR(100),
     duration TIME,
     genre_id INT,
@@ -29,7 +33,7 @@ CREATE TABLE IF NOT EXISTS genre (
     );
     
     CREATE TABLE IF NOT EXISTS artists (
-	artist_ID INT,
+	artist_ID INT NOT NULL AUTO_INCREMENT,
     genre_ID INT,
     artist_name VARCHAR(100),
     song_ID INT,
@@ -44,7 +48,7 @@ ADD CONSTRAINT artist_idsongsgenre
 FOREIGN KEY (artist_id) REFERENCES artists(artist_id);
     
 CREATE TABLE IF NOT EXISTS playlist (
-	playlist_ID INT,
+	playlist_ID INT NOT NULL AUTO_INCREMENT,
     user_ID INT,
     artist_ID INT,
 	song_ID INT,
@@ -58,7 +62,7 @@ CREATE TABLE IF NOT EXISTS playlist (
     );    
     
     CREATE TABLE IF NOT EXISTS plays (
-    plays_ID INT,
+    plays_ID INT NOT NULL AUTO_INCREMENT,
     user_ID INT,
     genre_ID INT,
     song_ID INT,
@@ -74,5 +78,12 @@ CREATE TABLE IF NOT EXISTS playlist (
     FOREIGN KEY (user_ID) REFERENCES user(user_ID)
 );
 
+UPDATE artists AS a
+JOIN songs AS s ON a.artist_ID = s.artist_id
+SET a.song_ID = s.song_ID;
 
+UPDATE plays
+JOIN playlist ON plays.song_ID = playlist.song_ID
+SET plays.playlist_ID = playlist.playlist_ID;
 
+COMMIT;

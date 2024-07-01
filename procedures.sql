@@ -1,3 +1,7 @@
+START TRANSACTION;
+
+use spotify;
+
 -- SP para ordenar uma tabela:
 DELIMITER //
 CREATE PROCEDURE sp_order_table(
@@ -28,11 +32,23 @@ CREATE PROCEDURE sp_new_user(
     IN userBirth DATE
 )
 BEGIN
-    INSERT INTO user (user_ID, user_name, user_email, user_type, date_birth) 
-    VALUES (userID, userName, userEmail, userType, userBirth);
+    IF userID IS NULL THEN
+        -- Insere sem userID para permitir auto-incremento
+        INSERT INTO user (user_name, user_email, user_type, date_birth)
+        VALUES (userName, userEmail, userType, userBirth);
+    ELSE
+        -- Insere com o userID fornecido
+        INSERT INTO user (user_ID, user_name, user_email, user_type, date_birth)
+        VALUES (userID, userName, userEmail, userType, userBirth);
+    END IF;
 END //
+
 DELIMITER ;
 
 -- Basta inserir o novo ID, nome do usuario, tipo de conta e data de nascimento
 -- EX Inserindo um novo usuario Joao
-CALL sp_new_user(1, 'João', 'joao@example.com', 'Regular', '1990-05-16');
+CALL sp_new_user(null,'João', 'joao@example.com', 'Regular', '1990-05-16');
+
+select * from user;
+
+COMMIT;
